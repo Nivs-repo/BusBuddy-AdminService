@@ -8,6 +8,6 @@ import com.tcs.busbuddy.model.AppUser;
 
 
 public interface AppUserRepository extends JpaRepository<AppUser, Long>{
-    Optional<AppUser> findByUserName(String userName);
+    Optional<AppUser> findByUsername(String userName);
 }
 

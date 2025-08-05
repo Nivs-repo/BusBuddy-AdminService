@@ -13,7 +13,7 @@ public class AppUser {
     @Column(name = "user_id")
     private Long userId;
     @Column(unique = true)
-    private String userName;
+    private String username;
     private String password;
     private String role;
 
