@@ -3,6 +3,8 @@ package com.tcs.busbuddy.controller;
 import com.tcs.busbuddy.security.JwtUtil;
 import com.tcs.busbuddy.dto.LoginRequest;
 import com.tcs.busbuddy.dto.LoginResponse;
+import com.tcs.busbuddy.model.AppUser;
+import com.tcs.busbuddy.repository.AppUserRepository;
 import com.tcs.busbuddy.security.CustomUserDetails;
 import jakarta.validation.Valid;
 
@@ -11,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +25,20 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private AppUserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostMapping("/register")
+    public String registerUser(@RequestBody AppUser user) {
+        //  Encode password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return "User registered successfully!";
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {

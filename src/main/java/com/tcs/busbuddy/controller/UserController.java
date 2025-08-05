@@ -8,20 +8,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/employee")
 public class UserController {
 
-    @Autowired
-    private AppUserRepository userRepository;
+    
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    
 
-    @PostMapping("/register")
-    public String registerUser(@RequestBody AppUser user) {
-        // ✅ Encode password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return "✅ User registered successfully!";
+    @GetMapping("/dashboard")
+    public String userDashboard() {
+        return "Welcome, Employee! You have employee-level access.";
     }
 }

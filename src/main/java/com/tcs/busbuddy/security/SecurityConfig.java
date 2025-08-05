@@ -35,6 +35,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll() // Allow login endpoint
                 .requestMatchers(HttpMethod.POST, "/api/register").permitAll() // Allow public endpoint
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")             //  ADMIN only
+                .requestMatchers("/api/driver/**").hasAnyRole("DRIVER","ADMIN")           //  DRIVER only
+                .requestMatchers("/api/employee/**").hasAnyRole("EMPLOYEE","ADMIN")    //  EMPLOYEE or ADMIN
                 .anyRequest().authenticated() // All others need authentication
             )
             .sessionManagement(sess -> sess
