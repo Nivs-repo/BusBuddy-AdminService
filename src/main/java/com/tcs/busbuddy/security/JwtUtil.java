@@ -11,7 +11,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 
-    private static final String secret = "BusBuddyApp29051999";
+    private static final String secret = "BusBuddyAppSuperSecureKey123456!";
     private final Key key = Keys.hmacShaKeyFor(secret.getBytes());
 
     public String generateToken(String userName) {
