@@ -1,4 +1,4 @@
-package com.tcs.busbuddy.security;
+package com.tcs.busbuddy.user.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,6 +38,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")             //  ADMIN only
                 .requestMatchers("/api/driver/**").hasAnyRole("DRIVER","ADMIN")           //  DRIVER only
                 .requestMatchers("/api/employee/**").hasAnyRole("EMPLOYEE","ADMIN")    //  EMPLOYEE or ADMIN
+                .requestMatchers(HttpMethod.POST, "/api/locations/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/locations/**").hasAnyRole("EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/locations/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/locations/**").hasRole("ADMIN")
                 .anyRequest().authenticated() // All others need authentication
             )
             .sessionManagement(sess -> sess

@@ -1,4 +1,4 @@
-package com.tcs.busbuddy.model;
+package com.tcs.busbuddy.user.model;
 
 import jakarta.persistence.*;
 

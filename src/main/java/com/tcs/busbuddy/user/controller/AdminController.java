@@ -1,4 +1,4 @@
-package com.tcs.busbuddy.controller;
+package com.tcs.busbuddy.user.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

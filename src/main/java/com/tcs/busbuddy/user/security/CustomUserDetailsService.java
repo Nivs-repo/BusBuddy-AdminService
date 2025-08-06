@@ -1,4 +1,4 @@
-package com.tcs.busbuddy.security;
+package com.tcs.busbuddy.user.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.tcs.busbuddy.model.AppUser;
-import com.tcs.busbuddy.repository.AppUserRepository;
+import com.tcs.busbuddy.user.model.AppUser;
+import com.tcs.busbuddy.user.repository.AppUserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService{

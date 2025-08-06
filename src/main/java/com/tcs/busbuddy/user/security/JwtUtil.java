@@ -1,4 +1,4 @@
-package com.tcs.busbuddy.security;
+package com.tcs.busbuddy.user.security;
 
 import java.security.Key;
 import java.util.Date;

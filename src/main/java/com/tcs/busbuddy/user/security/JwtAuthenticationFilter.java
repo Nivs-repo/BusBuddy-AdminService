@@ -1,8 +1,11 @@
-package com.tcs.busbuddy.security;
+package com.tcs.busbuddy.user.security;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +18,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final Log customLogger = LogFactory.getLog(JwtAuthenticationFilter.class);
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
@@ -28,6 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        customLogger.debug("JwtAuthenticationFilter triggered");
+
         // 1. Get the "Authorization" header from the request
         String authHeader = request.getHeader("Authorization");
 

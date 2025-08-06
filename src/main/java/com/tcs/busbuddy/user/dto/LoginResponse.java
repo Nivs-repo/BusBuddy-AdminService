@@ -1,4 +1,4 @@
-package com.tcs.busbuddy.dto;
+package com.tcs.busbuddy.user.dto;
 
 public class LoginResponse {
     private String token;
