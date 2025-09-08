@@ -1,0 +1,110 @@
+# =========================
+# Azure DevOps Pipeline for Admin Service (Self-hosted Agent)
+# =========================
+
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+
+pr:
+  branches:
+    include:
+      - main
+
+variables:
+  javaVersion: '17'
+  artifactName: 'admin-service'
+  buildDir: '$(Build.SourcesDirectory)/target'
+
+stages:
+# =========================
+# 1️⃣ Build Stage
+# =========================
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+    - job: BuildJob
+      displayName: 'Build Admin Service'
+      pool:
+        name: BusBuddyPool     
+        demands:
+          - agent.name -equals MyAgent   
+      steps:
+        - checkout: self
+
+        # Build with Maven
+        - task: Maven@3
+          displayName: 'Build with Maven'
+          inputs:
+            mavenPomFile: 'pom.xml'
+            goals: 'clean package -DskipTests'
+
+        # Publish build artifact
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Artifact'
+          inputs:
+            PathtoPublish: '$(buildDir)'
+            ArtifactName: '$(artifactName)'
+            publishLocation: 'Container'
+
+
+# =========================
+# 2️⃣ Deploy to Dev/Test (Feature Branches)
+# =========================
+- stage: DeployDev
+  displayName: 'Deploy to Dev/Test'
+  dependsOn: Build
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/'))
+  jobs:
+    - job: DeployDevJob
+      displayName: 'Deploy to Dev/Test App Service'
+      pool:
+        name: BusBuddyPool
+        demands:
+          - agent.name -equals MyAgent
+      steps:
+        - task: DownloadBuildArtifacts@1
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: '$(artifactName)'
+            downloadPath: '$(Pipeline.Workspace)'
+
+        - task: AzureWebApp@1
+          displayName: 'Deploy to Dev/Test App Service'
+          inputs:
+            azureSubscription: 'azure-busbuddy-connection'
+            appName: 'admin-service-app'
+            package: '$(Pipeline.Workspace)/$(artifactName)/*.jar'
+
+
+# =========================
+# 3️⃣ Deploy to Prod (Main Branch)
+# =========================
+- stage: DeployProd
+  displayName: 'Deploy to Production'
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+    - job: DeployProdJob
+      displayName: 'Deploy to Production App Service'
+      pool:
+        name: BusBuddyPool
+        demands:
+          - agent.name -equals MyAgent
+      steps:
+        - task: DownloadBuildArtifacts@1
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: '$(artifactName)'
+            downloadPath: '$(Pipeline.Workspace)'
+
+        - task: AzureWebApp@1
+          displayName: 'Deploy to Production App Service'
+          inputs:
+            azureSubscription: 'azure-busbuddy-connection'
+            appName: 'admin-service-app'
+            package: '$(Pipeline.Workspace)/$(artifactName)/*.jar'
