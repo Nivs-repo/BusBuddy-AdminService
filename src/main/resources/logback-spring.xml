@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- Properties -->
+    <property name="LOG_PATH" value="logs" />
+    <property name="APP_NAME" value="BusBuddy" />
+
+    <!-- Console Appender -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling File Appender -->
+    <appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Azure Application Insights Appender -->
+    <appender name="aiAppender" class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender">
+        <!-- Use Instrumentation Key or Connection String -->
+        <!-- Recommended: set via ENV variable APPLICATIONINSIGHTS_CONNECTION_STRING -->
+        <instrumentationKey>PUT-YOUR-INSTRUMENTATION-KEY-HERE</instrumentationKey>
+    </appender>
+
+    <!-- Root Logger -->
+    <root level="INFO">
+        <appender-ref ref="Console" />
+        <appender-ref ref="FileAppender" />
+        <appender-ref ref="aiAppender" />
+    </root>
+
+    <!-- Package-specific logging (optional, for BusBuddy debug) -->
+    <logger name="com.busbuddy.driverservice" level="DEBUG" additivity="false">
+        <appender-ref ref="Console" />
+        <appender-ref ref="FileAppender" />
+        <appender-ref ref="aiAppender" />
+    </logger>
+
+</configuration>
