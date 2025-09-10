@@ -29,14 +29,14 @@ public class LocationController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    //@PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ResponseEntity<ApiResponse<List<Location>>> getAllLocations() {
         List<Location> locations = locationService.getAllLocations();
         return ResponseBuilder.buildSuccessResponse(locations);
     }
 
     @GetMapping("/{locationId}")
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    //@PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ResponseEntity<ApiResponse<Location>> getLocationById(@PathVariable Long locationId) {
         Location location = locationService.getLocationById(locationId);
         return ResponseBuilder.buildSuccessResponse(location);
