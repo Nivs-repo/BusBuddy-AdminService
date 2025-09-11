@@ -34,21 +34,12 @@ stages:
       steps:
         - checkout: self
 
-        # 🧹 Clean agent temp folder to free memory/disk
-        - script: |
-            echo "Cleaning agent temp folder..."
-            if exist "C:\azagent\_work\_temp" rmdir /s /q "C:\azagent\_work\_temp"
-            mkdir "C:\azagent\_work\_temp"
-          displayName: 'Clean agent _temp folder'
-
         # Build with Maven
         - task: Maven@3
           displayName: 'Build with Maven'
           inputs:
             mavenPomFile: 'pom.xml'
             goals: 'clean package -DskipTests'
-          env:
-            MAVEN_OPTS: "-Xmx1024m -Xms512m"
 
         # Publish build artifact
         - task: PublishBuildArtifacts@1
