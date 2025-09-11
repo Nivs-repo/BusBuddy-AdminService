@@ -1,5 +1,5 @@
 # =========================
-# Azure DevOps Pipeline for Admin Service (Self-hosted Agent)
+# Azure DevOps Pipeline for Admin Service (Microsoft-hosted Agent)
 # =========================
 
 trigger:
@@ -28,9 +28,7 @@ stages:
     - job: BuildJob
       displayName: 'Build Admin Service'
       pool:
-        name: BusBuddyPool     
-        demands:
-          - agent.name -equals MyAgent   
+        vmImage: 'ubuntu-latest'   # 👈 switched to Microsoft hosted agent
       steps:
         - checkout: self
 
@@ -40,6 +38,8 @@ stages:
           inputs:
             mavenPomFile: 'pom.xml'
             goals: 'clean package -DskipTests'
+          env:
+            MAVEN_OPTS: "-Xmx1024m -Xms512m"   # 👈 limit JVM memory to avoid OOM
 
         # Publish build artifact
         - task: PublishBuildArtifacts@1
@@ -61,9 +61,7 @@ stages:
     - job: DeployDevJob
       displayName: 'Deploy to Dev/Test App Service'
       pool:
-        name: BusBuddyPool
-        demands:
-          - agent.name -equals MyAgent
+        vmImage: 'ubuntu-latest'   # 👈 hosted agent
       steps:
         - task: DownloadBuildArtifacts@1
           inputs:
@@ -91,9 +89,7 @@ stages:
     - job: DeployProdJob
       displayName: 'Deploy to Production App Service'
       pool:
-        name: BusBuddyPool
-        demands:
-          - agent.name -equals MyAgent
+        vmImage: 'ubuntu-latest'   # 👈 hosted agent
       steps:
         - task: DownloadBuildArtifacts@1
           inputs:
