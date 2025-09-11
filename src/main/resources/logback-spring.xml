@@ -26,9 +26,8 @@
 
     <!-- Azure Application Insights Appender -->
     <appender name="aiAppender" class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender">
-        <!-- Use Instrumentation Key or Connection String -->
-        <!-- Recommended: set via ENV variable APPLICATIONINSIGHTS_CONNECTION_STRING -->
-        <instrumentationKey>PUT-YOUR-INSTRUMENTATION-KEY-HERE</instrumentationKey>
+        <!-- Do NOT hardcode here, SDK will auto-pick from APPLICATIONINSIGHTS_CONNECTION_STRING -->
+        <!-- Leave this tag empty or remove it -->
     </appender>
 
     <!-- Root Logger -->
@@ -38,11 +37,7 @@
         <appender-ref ref="aiAppender" />
     </root>
 
-    <!-- Package-specific logging (optional, for BusBuddy debug) -->
-    <logger name="com.busbuddy.driverservice" level="DEBUG" additivity="false">
-        <appender-ref ref="Console" />
-        <appender-ref ref="FileAppender" />
-        <appender-ref ref="aiAppender" />
-    </logger>
-
+    <!-- Example: custom package logging -->
+    <logger name="com.busbuddy" level="DEBUG" />
+    
 </configuration>
