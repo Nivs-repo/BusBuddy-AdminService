@@ -1,5 +1,5 @@
 # =========================
-# Azure DevOps Pipeline for Admin Service (Self-hosted Agent with auto-install tools)
+# Azure DevOps Pipeline for Admin Service (Self-hosted Agent)
 # =========================
 
 trigger:
@@ -34,38 +34,14 @@ stages:
       steps:
         - checkout: self
 
-        # 🛠️ Install JDK 17 (only if missing on agent)
-        - task: JavaToolInstaller@0
-          displayName: 'Install JDK 17'
-          inputs:
-            versionSpec: '17'
-            jdkArchitecture: 'x64'
-            jdkSourceOption: 'PreInstalled'   # Will skip if already installed
-
-        # 🛠️ Install Maven (only if missing on agent)
-        - task: MavenInstaller@0
-          displayName: 'Install Maven'
-          inputs:
-            mavenVersionOption: 'Default'
-            mavenVersion: '3.9.5'
-
-        # 🧹 Clean agent temp folder to free memory
-        - script: |
-            echo "Cleaning agent temp folder..."
-            if exist "C:\azagent\_work\_temp" rmdir /s /q "C:\azagent\_work\_temp"
-            mkdir "C:\azagent\_work\_temp"
-          displayName: 'Clean agent _temp folder'
-
-        # ⚡ Build with Maven
+        # Build with Maven
         - task: Maven@3
           displayName: 'Build with Maven'
           inputs:
             mavenPomFile: 'pom.xml'
             goals: 'clean package -DskipTests'
-          env:
-            MAVEN_OPTS: "-Xmx1024m -Xms512m"
 
-        # 📦 Publish build artifact
+        # Publish build artifact
         - task: PublishBuildArtifacts@1
           displayName: 'Publish Artifact'
           inputs:
