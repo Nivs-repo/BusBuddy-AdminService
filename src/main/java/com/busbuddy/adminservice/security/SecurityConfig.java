@@ -13,23 +13,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomJwtAuthConverter converter) throws Exception {
         http
-            .csrf().disable()
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/",
-                    "/swagger-ui.html",
-                    "/swagger-ui/**",
-                    "/swagger-resources/**",
-                    "/v3/api-docs/**",
-                    "/api-docs/**",
-                    "/webjars/**"
-                ).permitAll()
+                .csrf().disable()
+                .authorizeHttpRequests()
                 .anyRequest().authenticated()
-            )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.jwtAuthenticationConverter(converter))
-            );
-
+                .and()
+                .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(converter); 
         return http.build();
     }
 
