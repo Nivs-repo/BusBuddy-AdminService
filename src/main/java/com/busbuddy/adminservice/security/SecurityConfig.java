@@ -15,15 +15,15 @@ public class SecurityConfig {
         http
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                // ✅ allow Swagger & API docs
                 .requestMatchers(
+                    "/",
                     "/swagger-ui.html",
                     "/swagger-ui/**",
+                    "/swagger-resources/**",
                     "/v3/api-docs/**",
                     "/api-docs/**",
                     "/webjars/**"
                 ).permitAll()
-                // everything else needs auth
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
@@ -32,4 +32,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
