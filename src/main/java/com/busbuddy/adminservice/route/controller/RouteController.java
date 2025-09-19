@@ -31,7 +31,7 @@ public class RouteController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<RouteResponse>>> getAllRoutes() {
         List<RouteResponse> routes = routeService.getAllRoutes();
         return ResponseBuilder.buildSuccessResponse(routes);

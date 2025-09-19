@@ -30,7 +30,7 @@ public class DriverController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<DriverResponse>>> getAllDrivers() {
         List<DriverResponse> drivers = driverService.getAllDrivers();
         return ResponseBuilder.buildSuccessResponse(drivers);

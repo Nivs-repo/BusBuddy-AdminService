@@ -29,7 +29,7 @@ public class LocationController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<Location>>> getAllLocations() {
         List<Location> locations = locationService.getAllLocations();
         return ResponseBuilder.buildSuccessResponse(locations);

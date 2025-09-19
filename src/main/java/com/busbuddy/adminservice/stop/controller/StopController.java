@@ -30,7 +30,7 @@ public class StopController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<StopResponse>>> getAllStops() {
         List<StopResponse> stops = stopService.getAllStops();
         return ResponseBuilder.buildSuccessResponse(stops);

@@ -39,7 +39,7 @@ public class BusController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<BusResponse>>> getAllBuses() {
         List<BusResponse> responseList = busService.getAllBuses();
         return ResponseBuilder.buildSuccessResponse(responseList);
